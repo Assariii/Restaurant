@@ -6,11 +6,11 @@ const User = require('../models/User');
 exports.register = async (req, res, next) => {
     
     try {
-        const {name, email,telephone, password, role} = req.body;
+        const {name,telephonenumber, email, password, role} = req.body;
         
         //Create User
         const user = await User.create({
-            name, email,telephone, password, role
+            name,telephonenumber, email, password, role
         });
         //Create token
         /*const token = user.getSignedJwtToken();
@@ -60,7 +60,7 @@ exports.logout = async(req,res,next) =>{
     });
     res.status(200).json({
         success:true,
-        data: { }
+        data: {}
     });
 };
 

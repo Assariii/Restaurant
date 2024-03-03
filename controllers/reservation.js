@@ -7,28 +7,28 @@ exports.getReservations = async (req,res,next)=>{
     if(req.user.role !== 'admin'){
         query=Reservation.find({user:req.user.id}).populate({
             path:'restaurant',
-            select: 'name addess tel'
+            select: 'name address tel'
         });
     }else{
         if(req.params.restaurantId){
-           
+           console.log(req.params.restaurantId);
             query = Reservation.find({restaurant: req.params.restaurantId}).populate({
                 path:'restaurant',
-                select: 'name addess tel',
+                select: 'name address tel',
             });
         }else{
             query = Reservation.find().populate({
                 path:'restaurant',
-                select:'name addess tel'
+                select:'name address tel'
             });
         }
         try{
-            const reservation = await query;
+            const reservations = await query;
 
             res.status(200).json({
                 success:true,
-                count: reservation.length,
-                data: reservation
+                count: reservations.length,
+                data: reservations
             });
         }catch(err){
             console.log(err.stack);
@@ -65,13 +65,16 @@ exports.getReservation = async (req,res,next)=>{
 
 exports.addReservation = async (req,res,next)=>{
     try{
+
+        // Debug
         req.body.restaurant = req.params.restaurantId;
         const restaurant = await Restaurant.findById(req.params.restaurantId);
 
         if(!restaurant){
             return res.status(404).json({success:false, message:`No reservation with the id of ${req.params.restaurantId}`});
         }
-        
+        console.log(req.body)
+      
         req.body.user = req.user.id;
 
         const existedReservations = await Reservation.find({user:req.user.id});

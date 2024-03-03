@@ -16,7 +16,7 @@ exports.getRestaurants = async (req,res,next) => {
     console.log(reqQuery);
     let queryStr=JSON.stringify(req.query);
     queryStr=queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match=>`$${match}`);
-    query = Restaurant.find(JSON.parse(queryStr)).populate('reservation');
+    query = Restaurant.find(JSON.parse(queryStr)).populate('reservations');
 
     if(req.query.select){
         const fields=req.query.select.split(',').join(' ');
@@ -123,7 +123,7 @@ exports.deleteRestaurant = async (req,res,next) => {
         if(!restaurant) {
             return res.status(400).json({success:false,message:`Bootcamp can not found with id of ${req.params.id}`});;
         }
-        await hospital.deleteOne();
+        await restaurant.deleteOne();
 
         res.status(200).json({success:true,data:{}});
     } catch (err) {

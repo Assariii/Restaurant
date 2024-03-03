@@ -1,9 +1,12 @@
 const express = require('express');
 const { getReservations,getReservation,addReservation,updateReservation,deleteReservation} = require('../controllers/reservation');
 
+
+
 const router = express.Router({ mergeParams: true });
 
 const { protect ,authorize } = require('../middleware/auth');
+
 
 router.route('/')
     .get(protect,getReservations)
